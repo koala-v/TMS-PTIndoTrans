@@ -6,6 +6,8 @@ appConfig.value('ENV', {
   // 'website': 'http://www.sysfreight.net:8081/tmsapp',
   // // 'api': 'http://localhost:1749',
   // 'api': 'http://192.168.0.229/Webapi',
+<<<<<<< HEAD
+
   'debug': true,
   'mock': false,
   'fromWeb': true,
@@ -16,6 +18,18 @@ appConfig.value('ENV', {
   'version': '1.0.24',
 
 
+=======
+  'debug': true,
+  'mock': false,
+  'fromWeb': true,
+  'appId': '9CBA0A78-7D1D-49D3-BA71-C72E93F9E48F',
+  'rootPath': 'TmsApp',
+  'configFile': 'config.txt',
+  'mapProvider': 'baidu',
+  'version': '1.0.24',
+
+
+>>>>>>> 5876cd204c8af32754e9c6023dc39c173f4500f7
 });
 
 var onGetRegistradionID = function(data) {

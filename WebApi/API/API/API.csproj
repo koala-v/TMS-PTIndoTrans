@@ -117,13 +117,11 @@
     <Content Include="libs\js\bootstrap.min.js" />
     <Content Include="libs\js\dialog-min.js" />
     <Content Include="libs\js\jquery.min.js" />
-    <Content Include="packages.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="bower.json" />
     <Content Include="libs\css\bootstrap.css.map" />
     <Content Include="libs\js\jquery.min.map" />
     <Content Include="package.json" />
+    <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\API.pubxml" />
     <None Include="Properties\PublishProfiles\Debug.pubxml" />
     <None Include="Web.Debug.config">

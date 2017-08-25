@@ -34,7 +34,8 @@ namespace WebApi.ServiceModel.Event
                 using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
                 {
 																				hsResult = db.HashSet<string>(
-																								"Select Distinct Jmjm4.JobNo From Jmjm4 Left Join Jmjm3 On Jmjm3.JobNo=Jmjm4.JobNo Where Jmjm4.PhoneNumber='" + request.PhoneNumber + "' And DATEDIFF(day, Jmjm3.StartDateTime, getdate())<=0"
+                                                                                            //	"Select Distinct Jmjm4.JobNo From Jmjm4 Left Join Jmjm3 On Jmjm3.JobNo=Jmjm4.JobNo Where Jmjm4.PhoneNumber='" + request.PhoneNumber + "' And DATEDIFF(day, Jmjm3.StartDateTime, getdate())<=0"
+                                                                                          "Select Distinct Jmjm4.JobNo From Jmjm4 Left Join Jmjm3 On Jmjm3.JobNo=Jmjm4.JobNo Where Jmjm4.PhoneNumber='" + request.PhoneNumber + "'"
                     );
 																				if (hsResult.Count > 0)
 																				{
