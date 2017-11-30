@@ -30,7 +30,7 @@
     <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>1</WarningLevel>
     <IncludeIisSettings>false</IncludeIisSettings>
     <DeployEncryptKey>加密密码仅在任何部署设置标记为安全时使用</DeployEncryptKey>
     <PublishDatabases>false</PublishDatabases>
@@ -117,11 +117,13 @@
     <Content Include="libs\js\bootstrap.min.js" />
     <Content Include="libs\js\dialog-min.js" />
     <Content Include="libs\js\jquery.min.js" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="bower.json" />
     <Content Include="libs\css\bootstrap.css.map" />
     <Content Include="libs\js\jquery.min.map" />
     <Content Include="package.json" />
-    <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\API.pubxml" />
     <None Include="Properties\PublishProfiles\Debug.pubxml" />
     <None Include="Web.Debug.config">
@@ -153,7 +155,9 @@
     <Content Include="swagger-ui\swagger-ui.min.js" />
     <Content Include="Templates\IndexOperations.html" />
     <Content Include="Templates\OperationControl.html" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppHost.cs" />

@@ -34,8 +34,8 @@ namespace WebApi.ServiceModel.Event
                 using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
                 {
 																				hsResult = db.HashSet<string>(
-                                                                                            //	"Select Distinct Jmjm4.JobNo From Jmjm4 Left Join Jmjm3 On Jmjm3.JobNo=Jmjm4.JobNo Where Jmjm4.PhoneNumber='" + request.PhoneNumber + "' And DATEDIFF(day, Jmjm3.StartDateTime, getdate())<=0"
-                                                                                          "Select Distinct Jmjm4.JobNo From Jmjm4 Left Join Jmjm3 On Jmjm3.JobNo=Jmjm4.JobNo Where Jmjm4.PhoneNumber='" + request.PhoneNumber + "'"
+                                                                                          //	"Select Distinct Jmjm4.JobNo From Jmjm4 Left Join Jmjm3 On Jmjm3.JobNo=Jmjm4.JobNo Where Jmjm4.PhoneNumber='" + request.PhoneNumber + "' And DATEDIFF(day, Jmjm3.StartDateTime, getdate())<=0"
+                                                                                          "Select Distinct Jmjm4.JobNo From Jmjm4 Left Join Jmjm3 On Jmjm3.JobNo=Jmjm4.JobNo Where Jmjm3.StatusCode <> 'CMP' And Jmjm4.PhoneNumber='" + request.PhoneNumber + "'"
                     );
 																				if (hsResult.Count > 0)
 																				{
@@ -45,8 +45,10 @@ namespace WebApi.ServiceModel.Event
 																												j.JobNo = strJobNo;
 																												j.ContainerCounts = GetCount(request.PhoneNumber, strJobNo).ToString();
 																												j.TaskDoneCounts = GetDoneCount(request.PhoneNumber, strJobNo).ToString();
+                                                                                                                if (j.ContainerCounts != j.TaskDoneCounts) {
 																												JobList.Add(j);
-																								}
+                                                                                               }
+                                                                                     }
 																				}
                 }
             }
@@ -60,7 +62,8 @@ namespace WebApi.ServiceModel.Event
             {
                 using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
                 {
-                    Result = db.Count<Jmjm4>(j4 => j4.PhoneNumber == strPhoneNumber && j4.JobNo == strJobNo && j4.DoneFlag != null);
+                    Result = db.Count<Jmjm4>(j4 => j4.PhoneNumber == strPhoneNumber && j4.JobNo == strJobNo );  //yicong 20171115
+                    //Result = db.Count<Jmjm4>(j4 => j4.PhoneNumber == strPhoneNumber && j4.JobNo == strJobNo && j4.DoneFlag != null); 
                 }
             }
             catch { throw; }

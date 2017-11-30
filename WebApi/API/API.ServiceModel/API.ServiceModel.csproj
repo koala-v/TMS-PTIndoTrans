@@ -35,6 +35,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net35\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ServiceStack, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\ServiceStack.3.9.71\lib\net35\ServiceStack.dll</HintPath>
       <Private>True</Private>
@@ -88,9 +92,27 @@
     <Compile Include="Freight\Tracking.cs" />
     <Compile Include="Freight\Rcvy.cs" />
     <Compile Include="Freight\ViewPDF.cs" />
+    <Compile Include="Tables\Imcc1.cs" />
+    <Compile Include="Tables\Imcc2.cs" />
+    <Compile Include="Tables\Imgi3.cs" />
+    <Compile Include="Tables\Jmje2.cs" />
+    <Compile Include="Tables\saal1.cs" />
+    <Compile Include="Tables\Imgi2_Verify.cs" />
+    <Compile Include="Tables\Imgi2_Picking.cs" />
+    <Compile Include="Tables\Imgr2_Receipt.cs" />
+    <Compile Include="Tables\Impm1_UserDefine.cs" />
+    <Compile Include="Tables\Impm1.cs" />
+    <Compile Include="Tables\Impm1_Enquiry.cs" />
+    <Compile Include="Tables\Impm1_Transfer.cs" />
+    <Compile Include="Tables\Imit.cs" />
     <Compile Include="Tables\Imgi2.cs" />
     <Compile Include="Tables\Imgi1.cs" />
     <Compile Include="Tables\Imgr1.cs" />
+    <Compile Include="Tables\Imgr2_Transfer.cs" />
+    <Compile Include="Tables\Imgr2_Putaway.cs" />
+    <Compile Include="Tables\Impa1.cs" />
+    <Compile Include="Tables\Whwh1.cs" />
+    <Compile Include="Tables\Whwh2.cs" />
     <Compile Include="Tables\Imgr2.cs" />
     <Compile Include="Tables\Impr1.cs" />
     <Compile Include="Tables\Jmje1.cs" />
@@ -133,19 +155,20 @@
     <Compile Include="Tms\Tms_Login.cs" />
     <Compile Include="Utils\Download.cs" />
     <Compile Include="Utils\Uploading.cs" />
-    <Compile Include="Wms\List_Imgi1.cs" />
-    <Compile Include="Wms\List_Imsn1.cs" />
-    <Compile Include="Wms\List_Imgi2.cs" />
-    <Compile Include="Freight\Rcbp.cs" />
-    <Compile Include="Wms\List_Imgr2.cs" />
-    <Compile Include="Wms\List_Impr1.cs" />
-    <Compile Include="Wms\List_Imgr1.cs" />
-    <Compile Include="Wms\List_Rcbp1.cs" />
+    <Compile Include="Wms\imcc.cs" />
+    <Compile Include="Wms\Imit.cs" />
+    <Compile Include="Wms\Imgi.cs" />
+    <Compile Include="Wms\Impm.cs" />
+    <Compile Include="Wms\Impa.cs" />
+    <Compile Include="Wms\Saal.cs" />
+    <Compile Include="Wms\Whwh.cs" />
+    <Compile Include="Wms\Imsn.cs" />
+    <Compile Include="Wms\Impr.cs" />
+    <Compile Include="Wms\Imgr.cs" />
+    <Compile Include="Wms\Rcbp.cs" />
     <Compile Include="Wms\Wms_Login.cs" />
     <Compile Include="Modfunction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Wms\Confirm_Imgr1.cs" />
-    <Compile Include="Wms\Insert_Imsn1.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

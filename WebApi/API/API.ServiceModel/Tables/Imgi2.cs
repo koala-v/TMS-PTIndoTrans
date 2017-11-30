@@ -16,5 +16,7 @@ namespace WebApi.ServiceModel.Tables
         public int PackingQty { get; set; }
         public int WholeQty { get; set; }
         public int LooseQty { get; set; }
+        public string QtyStatus { get; set; }
+       public string  UserDefine2 { get; set; }
     }
 }
