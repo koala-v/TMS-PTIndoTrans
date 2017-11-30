@@ -2,9 +2,9 @@
 var appConfig = angular.module('EventMob.config', []);
 appConfig.value('ENV', {
   'website': 'http://www.sysfreight.net:8081/app/tms/PTIndoTrans',
-   'api': 'http://www.sysfreight.net:8081/apis/tms/PTIndoTrans',
+   // 'api': 'http://www.sysfreight.net:8081/apis/tms/PTIndoTrans',
   // 'website': 'http://www.sysfreight.net:8081/tmsapp',
- // 'api': 'http://localhost:18104',
+ 'api': 'http://localhost:18104',
   // 'api': 'http://192.168.0.229/Webapi',
 // <<<<<<< HEAD
 

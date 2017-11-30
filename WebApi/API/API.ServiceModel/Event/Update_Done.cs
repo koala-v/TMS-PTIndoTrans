@@ -66,6 +66,17 @@ namespace WebApi.ServiceModel.Event
                            }
                             else
                            {
+                                if (Modfunction.CheckNull(ResultJmje2[0].InsertNextEventCode).Length > 0)
+                                {
+                                    SaveInsertNextEventCode(Modfunction.CheckNull(ResultJmje2[0].InsertNextEventCode),request.JobLineItemNo,request.JobNo ,request.PhoneNumber);
+                                }
+
+
+                                if (Modfunction.CheckNull(ResultJmje2[0].InsertNextEventGroup).Length > 0)
+                                {
+                                    SaveInsertGroupNameEvent(Modfunction.CheckNull(ResultJmje2[0].InsertNextEventGroup), request.JobLineItemNo, request.JobNo, request.PhoneNumber);
+                                }
+
                                    string strUpdateStautsCode;
                                    strUpdateStautsCode = "Update  Jmjm3 Set StatusCode ='CMP' Where JobNo ='" + request.JobNo + "' And LineItemNo ='"+request.JobLineItemNo+"'";
                                    db.ExecuteSql(strUpdateStautsCode);
@@ -117,6 +128,85 @@ namespace WebApi.ServiceModel.Event
             }
             catch { throw; } 
             return Result;
+        }
+        public void SaveInsertNextEventCode(string strInsertNextEventCode, int intMaxLIneItemNo,string strJobNo,string strUserId)
+        {
+
+            try
+            {
+                using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
+                {
+
+                    int intMaxLineItemNo = intMaxLIneItemNo + 1;
+                    string StrUpdateJmjm3 = "Update Jmjm3 Set LineItemNo = LineItemNo + 1  Where JobNo = '" + strJobNo + "' AND LineItemNo > " + intMaxLIneItemNo;
+                    db.ExecuteSql(StrUpdateJmjm3);
+                    string StrUpdateJmjm4 = "Update Jmjm4 Set JobLineItemNo = JobLineItemNo + 1 Where JobNo ='" + strJobNo + "' AND JobLineItemNo > " + intMaxLIneItemNo;
+                    db.ExecuteSql(StrUpdateJmjm4);
+                    string StrInsertJmjm3 = "INSERT INTO Jmjm3 (JobNo, LineItemNo,EventCode, Description, ShowETrackFlag,Remark,UpdateBy, UpdateDateTime) " + "Select '" + strJobNo + "'," + intMaxLineItemNo + ",EventCode,Description,EtrackFlag,Remark,'" + strUserId + "', getdate() from Jmje1 Where  EventCode= '" + strInsertNextEventCode + "'";
+                    db.ExecuteSql(StrInsertJmjm3);
+                }
+
+            }
+            catch { throw; }
+          
+
+
+      }
+
+        public void SaveInsertGroupNameEvent(string strInsertNextGroupCode, int intLineItem, string strJobNo, string strUserId)
+        {
+            List < Jmjm3 >  ResultJmjm3= null;
+            List<Jmeg2> ResultJmeg2 = null;
+
+
+            try
+            {
+                using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
+                {
+                    int intMaxLineItemNo = 0;
+                    string strSelectJmjm3 = "Select Max(LineItemNo)  as  LineItemNo from Jmjm3 Where JobNo = '" + strJobNo+"'";
+                    ResultJmjm3 = db.Select<Jmjm3>(strSelectJmjm3);
+                    if (ResultJmjm3.Count > 0)
+                    {
+                        intMaxLineItemNo = ResultJmjm3[0].LineItemNo + 1;
+                    }
+
+                    string strSelectJmeg2 = "Select EventCode from Jmeg2 Where GroupCode = '" + strInsertNextGroupCode + "'";
+                    ResultJmeg2 = db.Select<Jmeg2>(strSelectJmeg2);
+                    if (ResultJmeg2.Count > 0)
+                    {
+                        if (intLineItem > 0)
+                        {
+                            string StrUpdateJmjm7 = "Update Jmjm7 Set JobLineItemNo = JobLineItemNo + " + ResultJmeg2.Count + " Where JobNo = '" +strJobNo+ "' AND JobLineItemNo > " +intLineItem;
+                            db.ExecuteSql(StrUpdateJmjm7);
+
+                            string StrUpdateJmjm4 = "Update Jmjm4 Set JobLineItemNo = JobLineItemNo + " + ResultJmeg2.Count + " Where JobNo = '" + strJobNo +  "' AND JobLineItemNo > " + intLineItem;
+                            db.ExecuteSql(StrUpdateJmjm4);
+
+                            string StrUpdateJmjm3 = "update Jmjm3 Set LineItemNo = LineItemNo + " + ResultJmeg2.Count + " Where JobNo = '" + strJobNo + "' AND LineItemNo > " + intLineItem;
+                            db.ExecuteSql(StrUpdateJmjm3);
+
+                            intMaxLineItemNo = intLineItem + 1;
+
+                         
+                        }
+                        for (int i = 0; i < ResultJmeg2.Count; i++)
+                        {
+                            string StrInsertJmjm3 = "INSERT INTO Jmjm3 (JobNo, LineItemNo,EventCode, Description, ShowETrackFlag,Remark,UpdateBy, UpdateDateTime) " +"Select '" +strJobNo+"'," +intMaxLineItemNo +",EventCode,Description,EtrackFlag,Remark,'" + strUserId+ "', getdate() from Jmje1 Where  EventCode= '"+ ResultJmeg2[i].EventCode+ "'";
+                            db.ExecuteSql(StrInsertJmjm3);
+                            intMaxLineItemNo = intMaxLineItemNo + 1;
+                        }
+                    }
+
+             
+                 
+                }
+
+            }
+            catch { throw; }
+
+
+
         }
         public long InsertContainerNo(Update_Done request)
         {
