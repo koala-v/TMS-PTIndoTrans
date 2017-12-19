@@ -38,15 +38,17 @@ namespace WebApi.ServiceModel.Event
             {
                 using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
                 {
-                                     Result = db.Select<List_Container_Response>(
-																								"Select Jmjm4.JobNo, Jmjm4.JobLineItemNo, Jmjm4.LineItemNo," +
-																								"IsNull(Jmjm4.ContainerNo,'') AS ContainerNo, IsNull(Jmjm3.Description,'') AS Description," +
-																								"IsNull(Jmjm4.Remark,'') AS Remark, IsNull(Jmjm4.ItemName,'') AS ItemName," +
-																								"IsNull(Jmje1.AllowSkipFlag,'') AS AllowSkipFlag, IsNull(Jmjm4.DoneFlag,'') AS DoneFlag " +
-                        "From Jmjm4 Left Join Jmjm3 On Jmjm4.JobNo=Jmjm3.JobNo And Jmjm4.JobLineItemNo=Jmjm3.LineItemNo " +
-                        "Left Join Jmje1 On Jmjm3.EventCode=Jmje1.EventCode " +
-																								"Where Jmjm4.PhoneNumber='" + request.PhoneNumber + "' And Jmjm4.JobNo='" + request.JobNo + "'"
-                    );
+
+                     string  strSql ="";
+                    strSql ="Select Jmjm4.JobNo, Jmjm4.JobLineItemNo, Jmjm4.LineItemNo," +
+                             "IsNull(Jmjm4.ContainerNo,'') AS ContainerNo, IsNull(Jmjm3.Description,'') AS Description," +
+                             "IsNull(Jmjm4.Remark,'') AS Remark, IsNull(Jmjm4.ItemName,'') AS ItemName," +
+                             "IsNull(Jmje1.AllowSkipFlag,'') AS AllowSkipFlag, IsNull(Jmjm4.DoneFlag,'') AS DoneFlag " +
+                             "From Jmjm4 Left Join Jmjm3 On Jmjm4.JobNo=Jmjm3.JobNo And Jmjm4.JobLineItemNo=Jmjm3.LineItemNo " +
+                             "Left Join Jmje1 On Jmjm3.EventCode=Jmje1.EventCode " +
+                             "Where Jmjm4.DoneFlag <> 'Y' And Jmjm4.PhoneNumber='" + request.PhoneNumber + "' And Jmjm4.JobNo='" + request.JobNo + "'";
+
+                                     Result = db.Select<List_Container_Response>(strSql);
                 }
             }
             catch { throw; }

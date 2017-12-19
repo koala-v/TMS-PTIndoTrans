@@ -28,6 +28,7 @@ namespace WebApi.ServiceModel.Event
         {
             int Result = -1;
             List<Jmjm4> ResultJmjm4 = null;
+            List<Jmjm4> ResultJmjm4DoneFlag = null;
             List<Jmje2> ResultJmje2 = null;
             string strEventCode = "";
             string strSqlJmje2 = "";
@@ -62,8 +63,29 @@ namespace WebApi.ServiceModel.Event
                         {
                             if (Modfunction.CheckNull(ResultJmje2[0].InsertNextEventCode) == "" && Modfunction.CheckNull(ResultJmje2[0].InsertNextEventGroup) == "")
                            {
+                                bool BlnDoneFlag = true; 
+                                string strJmjm4DoneFlag = "select DoneFlag  from jmjm4 where jobno ='" + request.JobNo + "'And JobLineItemNo='" + request.JobLineItemNo + "' and PhoneNumber='" + request.PhoneNumber + "' ";
+                                ResultJmjm4DoneFlag = db.Select<Jmjm4>(strJmjm4DoneFlag);
+                                if (ResultJmjm4DoneFlag.Count > 0)
+                                {
+                                    for (int i = 0; i < ResultJmjm4DoneFlag.Count; i++)
+                                    {
+                                        if (ResultJmjm4DoneFlag[i].DoneFlag == "N")
+                                        {
+                                            BlnDoneFlag = false;
+                                            break;
+                                        }
+                                       
+                                    }
 
-                           }
+                                    if (BlnDoneFlag == true)
+                                    {
+                                        string strUpdateStautsCode;
+                                        strUpdateStautsCode = "Update  Jmjm3 Set StatusCode ='CMP' Where JobNo ='" + request.JobNo + "' And LineItemNo ='" + request.JobLineItemNo + "'";
+                                        db.ExecuteSql(strUpdateStautsCode);
+                                    }
+                                }
+                            }
                             else
                            {
                                 if (Modfunction.CheckNull(ResultJmje2[0].InsertNextEventCode).Length > 0)
@@ -85,43 +107,6 @@ namespace WebApi.ServiceModel.Event
                     }
 
 
-                    //for (int intI = 0; intI < ResultJmjm4.Count; intI++)
-                    //{
-                    //    if (ResultJmjm4[intI].DoneFlag != "Y")
-                    //    {
-                    //        blnDoneFlag = false;
-                    //        break;
-                    //    }
-                    //    else
-                    //    {
-                    //    }
-                    //}
-
-                    //if (blnDoneFlag == true)
-                    //{
-                    //    string strItemName="";
-                    //    string strEventCode = "";
-                    //    string strSqlJmje2 = "";
-                    //    for (int intI = 0; intI < ResultJmjm4.Count; intI++)
-                    //    {
-                    //        strItemName = Modfunction.CheckNull(ResultJmjm4[intI].ItemName);
-                    //        strEventCode = Modfunction.CheckNull(ResultJmjm4[intI].EventCode);
-                    //        strSqlJmje2 = "Select  InsertNextEventCode ,InsertNextEventGroup From jmje2 Where EventCode='" + strEventCode + "' And ItemName='" + strItemName + "'";
-                    //        ResultJmje2  = db.Select<Jmje2>(strSqlJmje2);
-                    //        if (Modfunction.CheckNull(ResultJmje2[0].InsertNextEventCode)=="" && Modfunction.CheckNull(ResultJmje2[0].InsertNextEventGroup) == "")
-                    //        {
-
-                    //        }
-                    //        else
-                    //        {
-                    //            string strUpdateStautsCode;
-                    //            strUpdateStautsCode = "Update  Jmjm3 Set StatusCode ='Complete' Where JobNo ='" + request.JobNo + "' And LineItemNo ='"+request.JobLineItemNo+"'";
-                    //            db.ExecuteSql(strUpdateStautsCode);
-                    //        }
-                    //    }
-
-                    //}
-
 
                 }
 
@@ -138,12 +123,13 @@ namespace WebApi.ServiceModel.Event
                 {
 
                     int intMaxLineItemNo = intMaxLIneItemNo + 1;
-                    string StrUpdateJmjm3 = "Update Jmjm3 Set LineItemNo = LineItemNo + 1  Where JobNo = '" + strJobNo + "' AND LineItemNo > " + intMaxLIneItemNo;
+                    string StrUpdateJmjm3 = "Update Jmjm3 Set LineItemNo = LineItemNo + 1  Where JobNo = '" + strJobNo + "' AND LineItemNo > " + intMaxLineItemNo;
                     db.ExecuteSql(StrUpdateJmjm3);
-                    string StrUpdateJmjm4 = "Update Jmjm4 Set JobLineItemNo = JobLineItemNo + 1 Where JobNo ='" + strJobNo + "' AND JobLineItemNo > " + intMaxLIneItemNo;
+                    string StrUpdateJmjm4 = "Update Jmjm4 Set JobLineItemNo = JobLineItemNo + 1 Where JobNo ='" + strJobNo + "' AND JobLineItemNo > " + intMaxLineItemNo;
                     db.ExecuteSql(StrUpdateJmjm4);
                     string StrInsertJmjm3 = "INSERT INTO Jmjm3 (JobNo, LineItemNo,EventCode, Description, ShowETrackFlag,Remark,UpdateBy, UpdateDateTime) " + "Select '" + strJobNo + "'," + intMaxLineItemNo + ",EventCode,Description,EtrackFlag,Remark,'" + strUserId + "', getdate() from Jmje1 Where  EventCode= '" + strInsertNextEventCode + "'";
                     db.ExecuteSql(StrInsertJmjm3);
+                    UpdateEventListToJmjm4(strInsertNextEventCode, intMaxLineItemNo, strJobNo);
                 }
 
             }
@@ -194,6 +180,7 @@ namespace WebApi.ServiceModel.Event
                         {
                             string StrInsertJmjm3 = "INSERT INTO Jmjm3 (JobNo, LineItemNo,EventCode, Description, ShowETrackFlag,Remark,UpdateBy, UpdateDateTime) " +"Select '" +strJobNo+"'," +intMaxLineItemNo +",EventCode,Description,EtrackFlag,Remark,'" + strUserId+ "', getdate() from Jmje1 Where  EventCode= '"+ ResultJmeg2[i].EventCode+ "'";
                             db.ExecuteSql(StrInsertJmjm3);
+                            UpdateEventListToJmjm4(Modfunction.CheckNull(ResultJmeg2[i].EventCode), intMaxLineItemNo, strJobNo);
                             intMaxLineItemNo = intMaxLineItemNo + 1;
                         }
                     }
@@ -205,9 +192,37 @@ namespace WebApi.ServiceModel.Event
             }
             catch { throw; }
 
-
-
         }
+
+        public void UpdateEventListToJmjm4( string strEventCode,int intJobLineItemNo,string strJobNo)
+        {
+            List<Jmje2> ResultJmje2 = null;
+            try
+            {
+                using (var db = DbConnectionFactory.OpenDbConnection("TMS"))
+                {
+                    if (strEventCode != null && strEventCode != "")
+                    {
+                        string strSelectJmje2 = "Select * from Jmje2 Where EventCode = '" + strEventCode + "'";
+                        ResultJmje2 = db.Select<Jmje2>(strSelectJmje2);
+                        if (ResultJmje2.Count > 0)
+                        {
+                            int intLineItemNo = 1;
+                            for (int i = 0; i < ResultJmje2.Count; i++)
+                            {
+                                string insertJmjm4 = "Insert Into Jmjm4(JobNo,JobLineItemNo,EventLineItemNo,LineItemNo,DoneFlag,ItemName,MobileUser,Remark) values (" +
+                                                                       "'"+ strJobNo + "',"+ intJobLineItemNo + ","+ ResultJmje2[i].LineItemNo+ ","+ intLineItemNo + ",NULL,'" + Modfunction.CheckNull(ResultJmje2[i].ItemName) + "','"+ Modfunction.CheckNull(ResultJmje2[i].MobileUser) + "', '' )";
+                                intLineItemNo = intLineItemNo + 1;
+                                db.ExecuteSql(insertJmjm4);
+                            }
+                        }
+                    }
+                }
+
+            }
+            catch { throw; }
+        }
+
         public long InsertContainerNo(Update_Done request)
         {
             long Result = -1;

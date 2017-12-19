@@ -9,6 +9,9 @@ namespace WebApi.ServiceModel.Tables
     {
         public string InsertNextEventCode { get; set; }
         public string InsertNextEventGroup { get; set; }
+        public int LineItemNo { get; set; }
+        public string MobileUser { get; set; }
+        public string ItemName { get; set; }
 
     }
 }
