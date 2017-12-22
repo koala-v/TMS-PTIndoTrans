@@ -35,7 +35,7 @@ namespace WebApi.ServiceModel.Event
                 {
 																				hsResult = db.HashSet<string>(
                                                                                           //	"Select Distinct Jmjm4.JobNo From Jmjm4 Left Join Jmjm3 On Jmjm3.JobNo=Jmjm4.JobNo Where Jmjm4.PhoneNumber='" + request.PhoneNumber + "' And DATEDIFF(day, Jmjm3.StartDateTime, getdate())<=0"
-                                                                                          "Select Distinct Jmjm4.JobNo From Jmjm4 Left Join Jmjm3 On Jmjm3.JobNo=Jmjm4.JobNo Where Jmjm3.StatusCode <> 'CMP' And Jmjm4.PhoneNumber='" + request.PhoneNumber + "'"
+                                                                                          "Select Distinct Jmjm4.JobNo From Jmjm4 Left Join Jmjm3 On Jmjm3.JobNo=Jmjm4.JobNo And Jmjm3.LineItemNo=Jmjm4.JobLineItemNo  Where Jmjm3.StatusCode <> 'CMP' And Jmjm4.PhoneNumber='" + request.PhoneNumber + "'"
                     );
 																				if (hsResult.Count > 0)
 																				{

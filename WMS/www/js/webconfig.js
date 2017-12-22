@@ -15,7 +15,7 @@ appConfig.value('ENV', {
   'rootPath': 'TmsApp',
   'configFile': 'config.txt',
   'mapProvider': 'baidu',
-  'version': '1.0.26',
+  'version': '1.0.27',
 
 
 // =======
