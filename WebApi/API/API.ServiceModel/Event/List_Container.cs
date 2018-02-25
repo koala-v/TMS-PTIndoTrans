@@ -46,7 +46,7 @@ namespace WebApi.ServiceModel.Event
                              "IsNull(Jmje1.AllowSkipFlag,'') AS AllowSkipFlag, IsNull(Jmjm4.DoneFlag,'') AS DoneFlag " +
                              "From Jmjm4 Left Join Jmjm3 On Jmjm4.JobNo=Jmjm3.JobNo And Jmjm4.JobLineItemNo=Jmjm3.LineItemNo " +
                              "Left Join Jmje1 On Jmjm3.EventCode=Jmje1.EventCode " +
-                             "Where Jmjm4.DoneFlag <> 'Y' And Jmjm4.PhoneNumber='" + request.PhoneNumber + "' And Jmjm4.JobNo='" + request.JobNo + "'";
+                             "Where isnull(Jmjm4.DoneFlag,'') <> 'Y'  And Jmjm4.PhoneNumber='" + request.PhoneNumber + "' And Jmjm4.JobNo='" + request.JobNo + "'";
 
                                      Result = db.Select<List_Container_Response>(strSql);
                 }
